@@ -1,4 +1,4 @@
-from types import CodeType
+# from types import CodeType
 import pyttsx3 #pip install pyttsx3
 import speech_recognition as sr #pip install speechRecognition
 import datetime
@@ -7,6 +7,7 @@ import webbrowser
 import os
 import smtplib
 import sys
+import PyPDF2
 
 
 speaker = pyttsx3.init('sapi5')
@@ -31,7 +32,7 @@ def wishMe():
     else:
         speak("Good Evening!")  
 
-    speak("I am your personal smart companion Havoc.  how may I help you?")       
+    speak("I am your personal smart companion TOM.  how may I help you?")       
 
 def takeCommand():
     #It takes microphone input from the user and returns string output
@@ -40,6 +41,7 @@ def takeCommand():
     with sr.Microphone() as source:
         print("Listening...")
         r.pause_threshold = 1
+        r.energy_threshold=250
         audio = r.listen(source)
 
     try:
@@ -57,8 +59,8 @@ def sendEmail(to, content):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
-    server.login('hasnainahmedmiraj120@gmail.com', 'Ineedmoney2^100')
-    server.sendmail('hasnainahmedmiraj120@gmail.com', to, content)
+    server.login('hasnainahmedmiraj120@gmail.com', '00')
+    server.sendmail('hasnainahmedmiraj120@gmail.com', content)
     server.close()
 
 if __name__ == "__main__":
@@ -79,12 +81,16 @@ if __name__ == "__main__":
             speak("hi")
         elif "how are you" in query:
             speak('I am fine, what about you')
-        elif "what is your name" in query:
-            speak("My name is havoc")
+        elif "name" in query:
+            speak("My name is TOM")
         elif "who is your master" in query:
             speak("My master is hasnain ahmed miraj")
         elif 'open youtube' in query:
             webbrowser.open("youtube.com")
+        elif 'what can you do' in query:
+            speak('I can do tasks for you. Most important thing is I can tell jokes,ha ha ha')
+        elif 'tell me a joke' in query:
+            speak('')
 
         elif 'open google' in query:
             webbrowser.open("google.com")
@@ -97,7 +103,7 @@ if __name__ == "__main__":
             music_directory = 'C:\\Users\\HP\\OneDrive\\Documents\\code\\projects-all\\pythonproject\\voice assistant'
             songs = os.listdir(music_directory)
             print(songs)    
-            os.startfile(os.path.join(music_directory, songs[0]))
+            os.startfile(os.path.join(music_directory, songs[1]))
 
         elif 'the time' in query:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")    
@@ -118,6 +124,24 @@ if __name__ == "__main__":
             except Exception as e:
                 print(e)
                 speak("Sorry hasnain . I am not able to send this email")
-        elif 'please stop running' in query:
-            speak("ok sir have a good ")
+        elif 'read book' in query:
+            book=open('Understanding_Software_Architecture.pdf','rb') 
+                                                                    #give the name of the pdf file and keep it in the directory where you main.py is
+            pdf_reader=PyPDF2.PdfFileReader(book) 
+                                                #use PyPDF2.PdfFileReader() to select the book varible
+            total_page=pdf_reader.numPages # .numPages method is used from 
+                                        #PyPdf2   to which returns the total number of pages 
+                                    #here we initilize the python text to speech module
+            startpage=10 #initializing the page from where we can start to listen to
+            for i in range(startpage,total_page): #iterating everytime whenever a page ends
+                page=pdf_reader.getPage(i)
+                                            #selecting a single page from pdf and iterating everytime with (i)
+                text=page.extract_text()   #extracting the text of the page
+                speak("ok here is how it goes.......")
+                speak(text)           #spaker will say the extrancted text only
+                      
+                                  
+
+        elif 'exit' in query:
+            speak("ok sir have a good time")
             sys.exit()
