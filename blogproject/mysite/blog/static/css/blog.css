@@ -7,6 +7,10 @@
 .bigbrand{
     font-size:1.5rem;
 }
+.centerstage{
+    margin-right: auto;
+    margin-left: auto;
+}
   .loader {
     filter:hue-rotate(0deg);
     background:linear-gradient(45deg,#0f8,#08f);
